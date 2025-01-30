@@ -1,4 +1,4 @@
-# build
+# build `llama.cpp` on `macOS`
 
 ## deps
 
@@ -10,7 +10,6 @@
 
 * the main issue for running `llama.cpp` locally was to link `libomp` managed by `brew`
 * cmake was able to find `molten-vk` library managed by `brew` without explicit paths
-* `brew 
 * command:
 
 ```sh

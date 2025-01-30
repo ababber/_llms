@@ -1,11 +1,13 @@
 # _llms
 
+> Notes for my journey through llms.
+
 ## to do
 
 * [ ] determine max settings on local environment
 * [ ] download compatible models from [hugging face models](https://huggingface.co/models)
-
-> Notes for my journey through llms.
+* [ ] research a solution to manage hugging face models locally
+* [ ] `brew doctor`, determine how `Unbrewed dylibs, header files, and static libraries...` were generated, and cleanup
 
 ## `llama.cpp` notes
 
@@ -17,6 +19,7 @@
 
 * download models from `huggingface` to `~/llama.cpp/models`
 * [`huggingface` gemma-1.1-7b-it.Q4_K_M.gguf](https://huggingface.co/ggml-org/gemma-1.1-7b-it-Q4_K_M-GGUF/resolve/main/gemma-1.1-7b-it.Q4_K_M.gguf?download=true)
+* ensure models are in `.gguf` format
 * benchmark:
 
 ```sh
