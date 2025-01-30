@@ -9,7 +9,7 @@
 
 ## `llama.cpp` notes
 
-* due to the older hardware constraints of my local machine, `llama.cpp` will be used to run models locally
+* due to the older hardware (intel mac w/ amd egpu) constraints of my local machine, `llama.cpp` will be used to run models locally
 * [llama.cpp git repo](https://github.com/ggerganov/llama.cpp)
 * [vulkan backend](https://github.com/ggerganov/llama.cpp/blob/master/docs/build.md#vulkan)
 

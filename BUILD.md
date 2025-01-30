@@ -1,5 +1,9 @@
 # build
 
+## deps
+
+* `brew install cmake git libomp vulkan-headers glslang molten-vk shaderc`
+
 ## notes on attempting to build custom `llama.cpp`
 
 ### [fix for `Could NOT find OpenMP_C OpenMP_CXX OpenMP`](https://stackoverflow.com/questions/60126203/how-do-i-get-cmake-to-find-openmp-c-openmp-cxx-etc)
