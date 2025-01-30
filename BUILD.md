@@ -8,8 +8,7 @@
 
 ### [fix for `Could NOT find OpenMP_C OpenMP_CXX OpenMP`](https://stackoverflow.com/questions/60126203/how-do-i-get-cmake-to-find-openmp-c-openmp-cxx-etc)
 
-* the main issue for running `llama.cpp` locally was to link `libomp` managed by `brew`
-* `cmake` was able to find `molten-vk` library managed by `brew` without explicit paths
+* `cmake` command w/ explicit links to `env` vars for `libomp`, `vulkan-headers`, and `molten-vk`
 * command:
 
 ```sh
