@@ -2,8 +2,8 @@
 
 ## to do
 
-* [ ] `brew doctor`, and cleanup `Unbrewed dylibs, header files, and static libraries...`
 * [ ] determine max settings on local environment
+* [ ] download compatible models from [hugging face models](https://huggingface.co/models)
 
 > Notes for my journey through llms.
 
