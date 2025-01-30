@@ -9,19 +9,19 @@
 ### [fix for `Could NOT find OpenMP_C OpenMP_CXX OpenMP`](https://stackoverflow.com/questions/60126203/how-do-i-get-cmake-to-find-openmp-c-openmp-cxx-etc)
 
 * the main issue for running `llama.cpp` locally was to link `libomp` managed by `brew`
-* cmake was able to find `molten-vk` library managed by `brew` without explicit paths
+* `cmake` was able to find `molten-vk` library managed by `brew` without explicit paths
 * command:
 
 ```sh
 cmake -B build -DGGML_METAL=OFF -DGGML_VULKAN=ON \
-> -DOpenMP_C_FLAGS=-fopenmp=lomp \
-> -DOpenMP_CXX_FLAGS=-fopenmp=lomp \
-> -DOpenMP_C_LIB_NAMES="libomp" \
-> -DOpenMP_CXX_LIB_NAMES="libomp" \
-> -DOpenMP_libomp_LIBRARY="/usr/local/Cellar/libomp/19.1.7/lib/libomp.dylib" \
-> -DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp /usr/local/Cellar/libomp/19.1.7/lib/libomp.dylib -I/usr/local/Cellar/libomp/19.1.7/include" \
-> -DOpenMP_CXX_LIB_NAMES="libomp" \
-> -DOpenMP_C_FLAGS="-Xpreprocessor -fopenmp /usr/local/Cellar/libomp/19.1.7/lib/libomp.dylib -I/usr/local/Cellar/libomp/19.1.7/include"
+-DOpenMP_C_FLAGS=-fopenmp=lomp \
+-DOpenMP_CXX_FLAGS=-fopenmp=lomp \
+-DOpenMP_C_LIB_NAMES="libomp" \
+-DOpenMP_CXX_LIB_NAMES="libomp" \
+-DOpenMP_libomp_LIBRARY="/usr/local/Cellar/libomp/19.1.7/lib/libomp.dylib" \
+-DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp /usr/local/Cellar/libomp/19.1.7/lib/libomp.dylib -I/usr/local/Cellar/libomp/19.1.7/include" \
+-DOpenMP_CXX_LIB_NAMES="libomp" \
+-DOpenMP_C_FLAGS="-Xpreprocessor -fopenmp /usr/local/Cellar/libomp/19.1.7/lib/libomp.dylib -I/usr/local/Cellar/libomp/19.1.7/include"
 ```
 
 * output:
@@ -656,7 +656,7 @@ Embedding Metal library
 * commands:
 
 ```sh
- cmake -B build -DLLAMA_CURL=1 -DGGML_METAL=OFF -DGGML_VULKAN=1 \
+cmake -B build -DLLAMA_CURL=1 -DGGML_METAL=OFF -DGGML_VULKAN=1 \
 -DVulkan_INCLUDE_DIR=$(brew --prefix)/opt/vulkan-headers/include \
 -DVulkan_LIBRARY=$(find $(brew --prefix)/lib -name "libvulkan*" -type l) \
 -DOpenMP_ROOT=$(brew --prefix)/opt/libomp \
