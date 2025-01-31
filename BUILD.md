@@ -1,17 +1,20 @@
 # build `llama.cpp` on `macOS`
 
-## notes on attempting to build custom `llama.cpp`
+## notes on building and using `llama.cpp` w/ `vulkan` backend
+
+* using `vulkan sdk` creates unbrewed files in `/usr/local/lib`
+* using `brew install vulkan-headers glslang molten-vk shaderc vulkan-tools` causes issues with `vulkan env`
 
 ### [llama.cpp docs vulkan build](https://github.com/ggerganov/llama.cpp/blob/master/docs/build.md#vulkan)
 
 * [install `vulkan sdk`](https://vulkan.lunarg.com/sdk/home#windows)
 * `brew install cmake libomp`
-* causes `Unbrewed dylibs, header files, and static libraries...` to be generated when `brew doctor` b/c `vulkan sdk` files are written directly to `/usr/local/lib`
+* `vulkan sdk` causes `Unbrewed dylibs, header files, and static libraries...` to be generated b/c files are written directly to `/usr/local/lib`
 * no issues while using llm model
-* commands:
+* command_0:
 
 ```sh
-# `brew libomp` and link to where `brew` installs it
+# `brew libomp` and link to where `brew` installs it to fix `Could NOT find OpenMP_C OpenMP_CXX OpenMP`
 cmake -B build -DGGML_METAL=OFF -DGGML_VULKAN=ON \
 -DOpenMP_C_FLAGS=-fopenmp=lomp \
 -DOpenMP_CXX_FLAGS=-fopenmp=lomp \
@@ -21,15 +24,11 @@ cmake -B build -DGGML_METAL=OFF -DGGML_VULKAN=ON \
 -DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp $(brew --prefix)/opt/libomp/lib/libomp.dylib -I$(brew --prefix)/opt/libomp/include" \
 -DOpenMP_CXX_LIB_NAMES="libomp" \
 -DOpenMP_C_FLAGS="-Xpreprocessor -fopenmp $(brew --prefix)/opt/libomp/lib/libomp.dylib -I$(brew --prefix)/opt/libomp/include"
-
-# run after previous command output to ensure no errors or warnings
-cmake --build build --config Release
 ```
 
-* output:
+* output_0:
 
 ```sh
-# output of first command
 -- The C compiler identification is AppleClang 16.0.0.16000026
 -- The CXX compiler identification is AppleClang 16.0.0.16000026
 -- Detecting C compiler ABI info
@@ -69,8 +68,18 @@ cmake --build build --config Release
 -- Configuring done (2.6s)
 -- Generating done (1.1s)
 -- Build files have been written to: /Users/ankit/Playground/llama.cpp/build
+```
 
-# output of second command
+* command_1:
+
+```sh
+cmake --build build --config Release
+```
+
+* `warnings` can be ignored b/c model is able to run locally
+* output_1:
+
+```sh
 [  0%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o
 [  1%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o
 [  1%] Building CXX object ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o
@@ -404,8 +413,8 @@ c++: warning: /usr/local/opt/libomp/lib/libomp.dylib: 'linker' input unused [-Wu
 
 * `brew install cmake git libomp vulkan-headers glslang molten-vk shaderc vulkan-tools`
 * `cmake` command w/ explicit links to `env` vars for `libomp`, `vulkan-headers`, and `molten-vk`
-* issue with `vulkan` `env` variable when not installed via sdk: `ggml_vulkan: WARNING: Instance extension VK_KHR_portability_enumeration not found` occurs during usage
-* command:
+* issue with `vulkan env` variable when not installed via sdk: `ggml_vulkan: WARNING: Instance extension VK_KHR_portability_enumeration not found` occurs during usage
+* command_0:
 
 ```sh
 cmake -B build -DLLAMA_CURL=ON -DGGML_METAL=OFF -DGGML_VULKAN=ON \
@@ -423,7 +432,7 @@ cmake -B build -DLLAMA_CURL=ON -DGGML_METAL=OFF -DGGML_VULKAN=ON \
 -DVulkan_GLSLANG_VALIDATOR_EXECUTABLE="$(brew --prefix)/opt/glslang/bin/glslangValidator"
 ```
 
-* output:
+* output_0:
 
 ```sh
 -- The C compiler identification is AppleClang 16.0.0.16000026
@@ -468,14 +477,14 @@ cmake -B build -DLLAMA_CURL=ON -DGGML_METAL=OFF -DGGML_VULKAN=ON \
 -- Build files have been written to: /Users/ankit/Playground/llama.cpp/build
 ```
 
-* command:
+* command_1:
 
 ```sh
 cmake --build build --config Release
 ```
 
 * `warnings` can be ignored b/c model is able to run locally
-* output:
+* output_1:
 
 ```sh
 [  0%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o
@@ -814,7 +823,6 @@ c++: warning: /usr/local/opt/libomp/lib/libomp.dylib: 'linker' input unused [-Wu
 * commands:
 
 ```sh
-# for vulkan sdk
 cmake -B build -DLLAMA_CURL=1 -DGGML_METAL=OFF -DGGML_VULKAN=1 \
 -DVulkan_INCLUDE_DIR="$(brew --prefix)/opt/vulkan-headers/include" \
 -DVulkan_LIBRARY="$(find $(brew --prefix)/lib -name "libvulkan*" -type l)" \
@@ -824,7 +832,7 @@ cmake -B build -DLLAMA_CURL=1 -DGGML_METAL=OFF -DGGML_VULKAN=1 \
 cmake --build build --config Release
 ```
 
-* output
+* output:
 
 ```sh
 -- The C compiler identification is AppleClang 16.0.0.16000026
