@@ -7,7 +7,8 @@
 * [ ] determine max settings on local environment
 * [ ] download compatible models from [hugging face models](https://huggingface.co/models)
 * [ ] research a solution to manage hugging face models locally
-* [X] `brew doctor`, determine how `Unbrewed dylibs, header files, and static libraries...` were generated, and cleanup
+* [ ] create a wrapper or whitelist [whitelist unbrewed files](https://superuser.com/questions/656578/warning-unbrewed-dylibs-were-found-in-usr-local-lib)
+* [X] `brew doctor`, determine how `Unbrewed dylibs, header files, and static libraries...` were generated
 
 ## `llama.cpp` notes
 
