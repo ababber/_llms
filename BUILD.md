@@ -5,11 +5,11 @@
 * using `vulkan sdk` creates unbrewed files in `/usr/local/lib`
 * using `brew install vulkan-headers glslang molten-vk shaderc vulkan-tools` causes issues with `vulkan env`
 
-### [llama.cpp docs vulkan build](https://github.com/ggerganov/llama.cpp/blob/master/docs/build.md#vulkan)
+### llama.cpp docs vulkan build with OpenMP explicit link
 
 * [install `vulkan sdk`](https://vulkan.lunarg.com/sdk/home#windows)
 * `brew install cmake libomp`
-* `vulkan sdk` causes `Unbrewed dylibs, header files, and static libraries...` to be generated b/c files are written directly to `/usr/local/lib`
+* `vulkan sdk` causes `Unbrewed dylibs, header files, and static libraries...` to be generated b/c files are written directly to `/usr/local/lib`, which can be ignored, whitelisted, or wrapped
 * no issues while using `llama-cli`
 * command_0:
 
@@ -409,12 +409,14 @@ c++: warning: /usr/local/opt/libomp/lib/libomp.dylib: 'linker' input unused [-Wu
 [100%] Built target llama-q8dot
 ```
 
+## the below methods that build `llama.cpp` on macOS (intel) for an AMD eGPU produce errors and warnings
+
 ### [fix for `Could NOT find OpenMP_C OpenMP_CXX OpenMP`](https://stackoverflow.com/questions/60126203/how-do-i-get-cmake-to-find-openmp-c-openmp-cxx-etc)
 
 * `brew install cmake git libomp vulkan-headers glslang molten-vk shaderc vulkan-tools`
 * attempted to fix the `vulkan` library linking issue with explicit link to `molten vk`
-* needed to link `libomp` after that
-* while using `llama-cli` issue with `vulkan env` variable occurred: `ggml_vulkan: WARNING: Instance extension VK_KHR_portability_enumeration not found` 
+* needed to link `libomp` in `cmake` build when explicitly linking `molten vk`
+* while using `llama-cli` issue with `vulkan env` variable occurred: `ggml_vulkan: WARNING: Instance extension VK_KHR_portability_enumeration not found`
 * `cmake` command w/ explicit links to `env` vars for `libomp`, `vulkan-headers`, and `molten-vk`
 * command_0:
 
@@ -818,7 +820,7 @@ c++: warning: /usr/local/opt/libomp/lib/libomp.dylib: 'linker' input unused [-Wu
 [100%] Built target llama-q8dot
 ```
 
-### [build llama.cpp for macos](https://medium.com/@nks1608/building-llama-cpp-for-macos-on-intel-silicon-956bcb5b384b)
+### [build llama.cpp for macos w/ brew](https://medium.com/@nks1608/building-llama-cpp-for-macos-on-intel-silicon-956bcb5b384b)
 
 * `brew install cmake git libomp vulkan-headers glslang molten-vk shaderc`
 * unable to link `vulkan` library with `find`
@@ -880,4 +882,66 @@ Call Stack (most recent call first):
 -- Configuring incomplete, errors occurred!
 make: Makefile: No such file or directory
 make: *** No rule to make target `Makefile'.  Stop.
+```
+
+### [llama.cpp docs vulkan build](https://github.com/ggerganov/llama.cpp/blob/master/docs/build.md#vulkan)
+
+* [install `vulkan sdk`](https://vulkan.lunarg.com/sdk/home#windows)
+* command:
+
+```sh
+cmake -B build -DGGML_METAL=OFF -DGGML_VULKAN=ON
+```
+
+* fix `warning` before proceeding
+* output:
+
+```sh
+cmake -B build -DGGML_METAL=OFF -DGGML_VULKAN=ON
+-- The C compiler identification is AppleClang 16.0.0.16000026
+-- The CXX compiler identification is AppleClang 16.0.0.16000026
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /Library/Developer/CommandLineTools/usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /Library/Developer/CommandLineTools/usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Git: /usr/bin/git (found version "2.39.5 (Apple Git-154)")
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- ccache found, compilation results will be cached. Disable with GGML_CCACHE=OFF.
+-- CMAKE_SYSTEM_PROCESSOR: x86_64
+-- Including CPU backend
+-- Accelerate framework found
+# need to link cmake build to libomp
+-- Could NOT find OpenMP_C (missing: OpenMP_C_FLAGS OpenMP_C_LIB_NAMES) 
+-- Could NOT find OpenMP_CXX (missing: OpenMP_CXX_FLAGS OpenMP_CXX_LIB_NAMES) 
+-- Could NOT find OpenMP (missing: OpenMP_C_FOUND OpenMP_CXX_FOUND) 
+CMake Warning at ggml/src/ggml-cpu/CMakeLists.txt:53 (message):
+  OpenMP not found
+Call Stack (most recent call first):
+  ggml/src/CMakeLists.txt:318 (ggml_add_cpu_backend_variant_impl)
+
+
+-- x86 detected
+-- Adding CPU backend variant ggml-cpu: -march=native 
+-- Looking for dgemm_
+-- Looking for dgemm_ - found
+-- Found BLAS: /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks/Accelerate.framework
+-- BLAS found, Libraries: /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks/Accelerate.framework
+-- BLAS found, Includes: 
+-- Including BLAS backend
+-- Found Vulkan: /usr/local/lib/libvulkan.dylib (found version "1.4.304") found components: glslc glslangValidator
+-- Vulkan found
+-- GL_KHR_cooperative_matrix supported by glslc
+-- GL_NV_cooperative_matrix2 supported by glslc
+-- Including Vulkan backend
+-- Configuring done (5.3s)
+-- Generating done (1.4s)
+-- Build files have been written to: /Users/ankit/Playground/llama.cpp/build
 ```
