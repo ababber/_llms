@@ -10,7 +10,7 @@
 * [install `vulkan sdk`](https://vulkan.lunarg.com/sdk/home#windows)
 * `brew install cmake libomp`
 * `vulkan sdk` causes `Unbrewed dylibs, header files, and static libraries...` to be generated b/c files are written directly to `/usr/local/lib`
-* no issues while using llm model
+* no issues while using `llama-cli`
 * command_0:
 
 ```sh
@@ -412,8 +412,10 @@ c++: warning: /usr/local/opt/libomp/lib/libomp.dylib: 'linker' input unused [-Wu
 ### [fix for `Could NOT find OpenMP_C OpenMP_CXX OpenMP`](https://stackoverflow.com/questions/60126203/how-do-i-get-cmake-to-find-openmp-c-openmp-cxx-etc)
 
 * `brew install cmake git libomp vulkan-headers glslang molten-vk shaderc vulkan-tools`
+* attempted to fix the `vulkan` library linking issue with explicit link to `molten vk`
+* needed to link `libomp` after that
+* while using `llama-cli` issue with `vulkan env` variable occurred: `ggml_vulkan: WARNING: Instance extension VK_KHR_portability_enumeration not found` 
 * `cmake` command w/ explicit links to `env` vars for `libomp`, `vulkan-headers`, and `molten-vk`
-* issue with `vulkan env` variable when not installed via sdk: `ggml_vulkan: WARNING: Instance extension VK_KHR_portability_enumeration not found` occurs during usage
 * command_0:
 
 ```sh
@@ -818,8 +820,8 @@ c++: warning: /usr/local/opt/libomp/lib/libomp.dylib: 'linker' input unused [-Wu
 
 ### [build llama.cpp for macos](https://medium.com/@nks1608/building-llama-cpp-for-macos-on-intel-silicon-956bcb5b384b)
 
-* `brew install cmake git libomp vulkan-headers glslang molten-vk shaderc vulkan-tools`
-* unable to link `vulkan` library with explicit commands
+* `brew install cmake git libomp vulkan-headers glslang molten-vk shaderc`
+* unable to link `vulkan` library with `find`
 * commands:
 
 ```sh
