@@ -8,8 +8,8 @@
 * [ ] review quantization methods to find optimal method for local environment
 * [ ] use `gguf my repo` to quantize `deepseek r1` then `llama 3.3`
 * [ ] if `hf` repo constraints prevent quantizing either `deepseek r1` or `llama 3.3`, containerize `gguf my repo` and quantize the remaining model locally
-* [ ] create a wrapper or whitelist for files in `/usr/local/lib` w/ [whitelist unbrewed files](https://superuser.com/questions/656578/warning-unbrewed-dylibs-were-found-in-usr-local-lib)
 * [ ] research fine tuning and ai agents
+* [X] create a wrapper or whitelist for files in `/usr/local/lib` w/ [whitelist unbrewed files](https://superuser.com/questions/656578/warning-unbrewed-dylibs-were-found-in-usr-local-lib)
 * [X] research a solution to manage `huggingface` models locally
 * [X] download compatible models from [`huggingface` models](https://huggingface.co/models)
 * [X] `brew doctor`, determine how `Unbrewed dylibs, header files, and static libraries...` were generated
