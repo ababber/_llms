@@ -7,7 +7,7 @@
 
 ### llama.cpp docs vulkan build with OpenMP explicit link
 
-* [install `vulkan sdk`](https://vulkan.lunarg.com/sdk/home#windows)
+* [install `vulkan sdk`](https://vulkan.lunarg.com/sdk/home)
 * `brew install cmake libomp`
 * `vulkan sdk` causes `Unbrewed dylibs, header files, and static libraries...` to be generated b/c files are written directly to `/usr/local/lib`, which can be ignored, whitelisted, or wrapped
 * no issues while using `llama-cli`
